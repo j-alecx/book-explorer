@@ -14,6 +14,8 @@ body {
 .lib-shelf {
     width: 100vw;
     overflow: hidden;
+
+    box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.5);
 }
 
 .lib-shelf-img {
@@ -38,23 +40,12 @@ h1 {
     text-align: center;
     letter-spacing: 3px;
     font-size: 350%;
+
+    border-bottom: 5px solid white;
+    padding-bottom: 20px;
 }
 
 p {
     text-align: center;
     font-family: 'Arimo', sans-serif;
-}
-
-.description {
-    background-color:rgb(30, 56, 49);
-    width: 180vh;
-    height: 67vh;
-    margin: auto;
-    padding: 0px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border-radius: 15px;
 }
