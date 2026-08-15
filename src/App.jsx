@@ -106,4 +106,70 @@ function bookDetails({book, onClose}) {
   );
 }
 
-export default App;
+export default function App () {
+  const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
+  const [books, setBooks] = useState([]);
+  const [status, setStatus] = useState("Idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [selectedBook, setSelectedBook] = useState(null);
+
+  useEffect(() => {
+    if (!submittedQuery.trim()) {
+      setBooks([]);
+      setStatus("Idle");
+      return;
+    }
+
+    const controller = new AbortController();
+
+    async function fetchBooks() {
+      setStatus("Loading");
+      setErrorMessage("");
+      try {
+        const res = await fetch(
+          `https://openlibrary.org/search.json?q=${encodeURIComponent(submittedQuery)}`,
+        { signal: controller.signal}
+      );
+
+      if (!res.ok) {
+        throw new Error('Request failed (status ${res.status})');
+      }
+
+      const data = await res.json();
+      setBooks(data.docs || []);
+      setStatus("Success");
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          setErrorMessage(err.message || "Something went wrong.");
+          setStatus("Error");
+        }
+      }
+    }
+
+    fetchBooks();
+    return() => controller.abort();
+  }, [submittedQuery]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setSubmittedQuery(query.trim());
+  }
+
+  return (
+    <form className="search" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        className="search-input"
+        placeholder="Search..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}/>
+      <button
+        type="submit"
+        className="search-button"
+        disabled={status === "Loading" || !query.trim()}>
+          Search
+      </button>
+    </form>
+  );
+}
