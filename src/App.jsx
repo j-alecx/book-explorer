@@ -101,11 +101,19 @@ export default function App () {
   const [selectedBook, setSelectedBook] = useState(null);
 
   useEffect(() => {
-    if (!submittedQuery.trim()) {
-      setBooks([]);
-      setStatus("Idle");
-      return;
-    }
+    if (!book) return;
+      setDetails(null);
+      console.log("Fetching details for: ", book.key);
+      fetch(`https://openlibrary.org${book.key}.json`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Details received: ", data);
+          setDetails(data);
+        })
+        .catch((err) => {
+          console.error("Fetch failed: ", err);
+          setDetails(null);
+        });
 
     const controller = new AbortController();
 
@@ -135,7 +143,7 @@ export default function App () {
 
     fetchBooks();
     return() => controller.abort();
-  }, [submittedQuery]);
+  }, [book]);
 
   function handleSubmit(e) {
     e.preventDefault();
