@@ -238,6 +238,7 @@ p {
 
 .modal-header {
     display: flex;
+    flex-direction: column;
     gap: 1vh;
     margin-bottom: 1.25rem;
     padding: 3vh;
@@ -262,18 +263,21 @@ p {
     margin: 0 0 0.5rem;
     color: gray;
     font-size: 0.8rem;
+    text-align: center;
 }
 
 .modal-other {
     margin: 0.15rem 0;
     font-size: 0.8rem;
     color: gray;
+    text-align: center;
 }
 
 .modal-subheading {
     font-size: 1rem;
     margin: 0 0 0.5rem;
     color: gray;
+    text-align: center;
 }
 
 .tag {
