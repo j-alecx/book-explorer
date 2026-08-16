@@ -43,25 +43,17 @@ function BookList({books, onSelect}) {
 // Display the details for each book using modals 
 function BookDetails({book, onClose}) {
   const[details,setDetails] = useState(null);
+  const[detailsLoading,setDetailsLoading] = useState(false);
 
   useEffect(() => {
     if (!book) return;
     setDetails(null);
-    console.log("book.key is: ", book.key);
+    setDetailsLoading(true);
     fetch(`https://openlibrary.org${book.key}.json`)
-      .then((res) => {
-        console.log("Response status: ", res.status);
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Details received: ", data);
-        console.log("Subjects specifically: ", data.subjects);
-        setDetails(data);
-      })
-      .catch ((err) => {
-        console.error("Fetch failed: ", err);
-        setDetails(null);
-      });
+      .then((res) => res.json())
+      .then((data) => setDetails(data))
+      .catch(() => setDetails(null))
+      .finally(() => setDetailsLoading(false));
   }, [book]);
 
   if (!book) return null;

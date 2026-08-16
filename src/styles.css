@@ -276,10 +276,10 @@ p {
 }
 
 .tag {
-    background: rgb(50, 50, 50);
-    color: rgb(12, 62, 69);
+    background: rgb(12, 62, 69);
+    color: white;
     font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem;
     border-radius: 100px;
 }
 
