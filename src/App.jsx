@@ -1,73 +1,59 @@
 import React, {useState, useEffect} from "react";
 import Header from "./Header.jsx";
 
-function App() {
-  return (
-    <div>
-      <Header />
-      <div className="title">
-        <h1>Book Explorer</h1>
-      </div>
-      <div className="book-list">
-        <bookList />
-      </div>
-    </div>
-  );
-}
-
 // Renders book from the library 
-function bookCard({book, onSelect}) {
-  const coverUrl = book_cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null;
+function BookCard({book, onSelect}) {
+  const coverUrl = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null;
 
   return (
     <button className="book-card" onClick={() => onSelect(book)}>
       <div className="cover-url">
-        (coverUrl ? (
+        {coverUrl ? (
           <img src={coverUrl} className="cover"/>
         ) : (
           <div className="cover-placeholder">No cover</div>
-        ))
+        )}
       </div>
         <div className="book-info">
           <p className="book-title">
             {book.title}
           </p>
           <p className="book-author">
-            {book.author ? book.author.join(", ") : "Unknown author"}
+            {book.author_name ? book.author_name.join(", ") : "Unknown author"}
           </p>
           <p className="book-year">
-            {book.year ? book.year.join(", ") : "Unknown first published year"}
+            {book.first_publish_year ?? "Unknown first published year"}
           </p>
         </div>
     </button>
   );
 }
 
-function bookList({books, onSelect}) {
+function BookList({books, onSelect}) {
   return (
     <div className="book-grid">
       {books.map((book) => (
-        <bookCard key={book.key} book={book} onSelect={onSelect}
-      ></bookCard>
+        <BookCard key={book.key} book={book} onSelect={onSelect}
+      ></BookCard>
       ))}
     </div>
   );
 }
 
 // Display the details for each book using modals 
-function bookDetails({book, onClose}) {
+function BookDetails({book, onClose}) {
   if (!book) return null;
-  const coverUrl = book_cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null;
+  const coverUrl = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null;
   
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>
-          <i class="bi bi-x"></i>
+          <i className="bi bi-x"></i>
         </button>
         <div className="modal-header">
           {coverUrl ? (
-            <img src={coverUrl} className="book-cover"/>
+            <img src={coverUrl} className="modal-cover"/>
           ) : (
             <div className="cover-placeholder modal">No cover</div>
           )}
@@ -76,10 +62,10 @@ function bookDetails({book, onClose}) {
             {book.title}
           </h2>
           <p className="modal-author">
-            {book.author ? book.author.join(", ") : "Unknown author"}
+            {book.author_name ? book.author_name.join(", ") : "Unknown author"}
           </p>
           <p className="modal-other">
-            First published: {book.year ? book.year.join(", ") : "Unknown first published year"}
+            First published: {book.first_publish_year ?? "Unknown first published year"}
           </p>
           <p className="modal-other">
             Editions: {book.edition ?? "Unknown"}
@@ -133,7 +119,7 @@ export default function App () {
       );
 
       if (!res.ok) {
-        throw new Error('Request failed (status ${res.status})');
+        throw new Error(`Request failed (status ${res.status})`);
       }
 
       const data = await res.json();
@@ -157,19 +143,59 @@ export default function App () {
   }
 
   return (
-    <form className="search" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        className="search-input"
-        placeholder="Search..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}/>
-      <button
-        type="submit"
-        className="search-button"
-        disabled={status === "Loading" || !query.trim()}>
-          Search
-      </button>
-    </form>
+    <div className="app">
+      <div>
+        <Header />
+        <div className="title">
+          <h1>Book Explorer</h1>
+        </div>
+      </div>
+      <form className="search" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}/>
+        <button
+          type="submit"
+          className="search-button"
+          disabled={status === "Loading" || !query.trim()}>
+            Search
+        </button>
+      </form>
+
+      {/* Statuses */}
+      {status === "Loading" && (
+        <div className="status-message">
+          <div className="spinner"/>
+          Searching books...
+        </div>
+      )}
+
+      {status === "Error" && (
+        <div className="status-message error">
+          Something went wrong: {errorMessage}
+        </div>
+      )}
+
+      {status === "Success" && books.length === 0 && (
+        <div className="status-message">
+          No books found.
+        </div>
+      )}
+
+      {status === "Success" && books.length > 0 && (
+        <BookList books={books} onSelect={setSelectedBook} />
+      )}
+
+      {status === "Idle" && !submittedQuery && (
+        <div className="status-message">
+          Search for a book title or author.
+        </div> 
+      )}
+
+      <BookDetails book={selectedBook} onClose={() => setSelectedBook(null)}/>
+    </div> 
   );
 }
