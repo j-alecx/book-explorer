@@ -241,6 +241,7 @@ p {
     gap: 1vh;
     margin-bottom: 1.25rem;
     padding: 3vh;
+    text-align: center;
 }
 
 .modal-cover {
@@ -255,21 +256,18 @@ p {
     margin: 0 0 0.5rem;
     color: white;
     padding: 1rem;
-    text-align: center;
 }
 
 .modal-author {
     margin: 0 0 0.5rem;
     color: gray;
     font-size: 0.8rem;
-    text-align: center;
 }
 
 .modal-other {
     margin: 0.15rem 0;
     font-size: 0.8rem;
     color: gray;
-    text-align: center;
 }
 
 .modal-subheading {
