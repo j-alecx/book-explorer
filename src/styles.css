@@ -283,7 +283,7 @@ p {
     border-radius: 100px;
 }
 
-.tag-list {
+.tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
