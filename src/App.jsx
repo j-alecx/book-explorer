@@ -47,7 +47,7 @@ function BookDetails({book, onClose}) {
   useEffect(() => {
     if (!book) return;
     setDetails(null);
-    fetch(`https://operlibrary.org${book.key}.json`)
+    fetch(`https://openlibrary.org${book.key}.json`)
       .then((res) => res.json())
       .then((data) => setDetails(data))
       .catch (() =>  setDetails(null));
@@ -92,8 +92,8 @@ function BookDetails({book, onClose}) {
               <span className="tag" key={s}>
                 {s}
               </span>
-            ))}
-          </div>
+        ))}
+      </div>
         ) : (
           <p className="modal-other">No data available.</p>
         )}
