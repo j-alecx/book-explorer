@@ -13,7 +13,7 @@
   },
   "license": "ISC",
   "author": "j_alecx",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.jsx",
   "scripts": {
     "dev": "vite",
