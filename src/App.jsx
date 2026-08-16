@@ -47,10 +47,21 @@ function BookDetails({book, onClose}) {
   useEffect(() => {
     if (!book) return;
     setDetails(null);
+    console.log("book.key is: ", book.key);
     fetch(`https://openlibrary.org${book.key}.json`)
-      .then((res) => res.json())
-      .then((data) => setDetails(data))
-      .catch (() =>  setDetails(null));
+      .then((res) => {
+        console.log("Response status: ", res.status);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Details received: ", data);
+        console.log("Subjects specifically: ", data.subjects);
+        setDetails(data);
+      })
+      .catch ((err) => {
+        console.error("Fetch failed: ", err);
+        setDetails(null);
+      });
   }, [book]);
 
   if (!book) return null;
