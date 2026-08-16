@@ -1,0 +1,1 @@
+A simple React app for searching books using the Open Library Search API. Search by title or author and browse results in the form of book cards. Open the book card to see more details about the title, author, published year, edition count, and subjects in a modal.
