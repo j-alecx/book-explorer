@@ -47,12 +47,12 @@ function BookDetails({book, onClose}) {
   useEffect(() => {
     if (!book) return;
     setDetails(null);
-    fetch(`https:operlibrary.org${book.key}.json`)
-      .then((res) => res.jsson())
+    fetch(`https://operlibrary.org${book.key}.json`)
+      .then((res) => res.json())
       .then((data) => setDetails(data))
       .catch (() =>  setDetails(null));
-  })
-  
+  }, [book]);
+
   if (!book) return null;
   const coverUrl = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null;
   
@@ -76,7 +76,7 @@ function BookDetails({book, onClose}) {
             {book.author_name ? book.author_name.join(", ") : "Unknown author"}
           </p>
           <p className="modal-other">
-            First published: {book.first_publish_year ?? "Unknown first published year"}
+            First published: {book.first_publish_year ?? "Unknown year"}
           </p>
           <p className="modal-other">
             Editions: {book.edition ?? "Unknown"}
@@ -86,9 +86,9 @@ function BookDetails({book, onClose}) {
 
       <div className="modal-body">
         <h3 className="modal-subheader">Subjects</h3>
-        {book.subject && book.subject.length > 0 ? (
+        {details?.subjects && details.subjects.length > 0 ? (
           <div className="tags">
-            {book.subject.slice(0, 12).map((s) => (
+            {details.subjects.slice(0, 12).map((s) => (
               <span className="tag" key={s}>
                 {s}
               </span>
