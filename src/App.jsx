@@ -90,7 +90,7 @@ function BookDetails({book, onClose}) {
       <div className="modal-body">
         <h3 className="modal-subheader">Subjects</h3>
         {details?.subjects && details.subjects.length > 0 ? (
-          <div className="tags">
+          <div className="tag-list">
             {details.subjects.slice(0, 12).map((s) => (
               <span className="tag" key={s}>
                 {s}
