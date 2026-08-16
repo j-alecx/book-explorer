@@ -42,6 +42,17 @@ function BookList({books, onSelect}) {
 
 // Display the details for each book using modals 
 function BookDetails({book, onClose}) {
+  const[details,setDetails] = useState(null);
+
+  useEffect(() => {
+    if (!book) return;
+    setDetails(null);
+    fetch(`https:operlibrary.org${book.key}.json`)
+      .then((res) => res.jsson())
+      .then((data) => setDetails(data))
+      .catch (() =>  setDetails(null));
+  })
+  
   if (!book) return null;
   const coverUrl = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null;
   
